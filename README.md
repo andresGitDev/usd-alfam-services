@@ -8,7 +8,7 @@ URL: https://api-dolar-arg.vercel.app/
 > **Actualización:** dolarsi.com dejó de funcionar, por lo que la API ahora usa [dolarapi.com](https://dolarapi.com), [argentinadatos.com](https://argentinadatos.com) y la API del BCRA.
 > Siguen disponibles: `dolaroficial`, `dolarblue`, `contadoliqui`, `dolarbolsa`, `dolarturista`, `mayorista`, `riesgopais`, `bcra/reservas`, `bcra/circulante`, `evolucion/dolaroficial`, `evolucion/dolarblue` y `all`. Nuevos: `/api/dolarcripto`, `/api/euro/oficial`, `/api/real/oficial`.
 > Los endpoints de bancos, casas de cambio, `dolarpromedio`, euro/real por banco y evolución de euro/real ya no tienen fuente y responden **501**.
-> Puerto: `PORT` del entorno (o del `.env`), por defecto 7070.
+> Puerto: `PORT` del entorno (o del `.env`), por defecto 8085.
 
 | Metodo | Endpoint | Descripcion |
 | ------ | ------ | ------ |

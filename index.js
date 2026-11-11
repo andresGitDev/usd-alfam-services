@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const helmet = require('helmet')
 const router = require('./routes/router')
-const PORT = process.env.PORT || 7070
+const PORT = process.env.PORT || 8085
 const app = express();
 
 app.set('port', PORT);
