@@ -1,10 +1,12 @@
+const { ok, fail } = require('../util/respuesta')
+
 // Envuelve un handler async: si falla la fuente externa responde 502.
 const handle = (fn) => async (req, res) => {
     try {
-        res.send(await fn())
+        res.send(ok(await fn()))
     } catch (e) {
         console.log(e.message)
-        res.status(502).send({ error: 'No se pudo obtener la cotizacion de la fuente externa' })
+        res.status(502).send(fail('No se pudo obtener la cotizacion de la fuente externa'))
     }
 }
 

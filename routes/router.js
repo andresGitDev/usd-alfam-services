@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const { fail } = require('../util/respuesta')
 const util = require('../util/util')
 const cotizacionesService = require('../services/cotizacionesService')
 const cotizacionesController = require('../controller/cotizacionesController')
@@ -46,7 +47,7 @@ const noDisponibles = [
     '/api/casas/mendoza/montemar', '/api/casas/tucuman/maguitur'
 ]
 noDisponibles.forEach(ruta => router.get(ruta, (req, res) => {
-    res.status(501).send({ error: 'Cotizacion no disponible: la fuente original (dolarsi.com) dejo de funcionar' })
+    res.status(501).send(fail('Cotizacion no disponible: la fuente original (dolarsi.com) dejo de funcionar'))
 }))
 
 module.exports = router

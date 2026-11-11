@@ -135,5 +135,9 @@ El proyecto se despliega en Vercel desde el repo `andresGitDev/usd-alfam-service
 - `main`: producción. Cada push a `main` despliega automáticamente.
 - `develop`: desarrollo. Se trabaja acá y se hace merge a `main` cuando se quiere publicar.
 
+### Versión
+
+La versión que devuelve `/api/all` (`metadata.version`) se toma de `metadata.json` (`buildMajor.buildMinor.buildRevision`). En cada push a `main` el workflow `.github/workflows/bump-version.yml` incrementa `buildRevision` y actualiza `buildTag` (con `buildRevision: -1` el primer build queda en `1.0.0`). Para cambiar major/minor, editar `metadata.json` a mano (dejando `buildRevision` en `-1`).
+
 _Si encontras algun error o tenes alguna sugerencia, podes abrir un Issue o un Pull Request para contribuir._
 
