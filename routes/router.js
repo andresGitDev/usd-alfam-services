@@ -2,87 +2,51 @@ const express = require('express');
 const router = express.Router();
 
 const util = require('../util/util')
-const utilInstance = new util()
+const cotizacionesService = require('../services/cotizacionesService')
+const cotizacionesController = require('../controller/cotizacionesController')
 
-const dolarSiService = require('../services/dolarSiService')
-const dolarSiServiceInstance = new dolarSiService()
+const c = new cotizacionesController(new cotizacionesService(), new util())
 
-const dolarController = require('../controller/dolarController')
-const dolarInstance = new dolarController(dolarSiServiceInstance, utilInstance)
+router.get('/api/all', c.getAllValues)
 
-const bancoController = require('../controller/bancosController')
-const bancoInstance = new bancoController(dolarSiServiceInstance, utilInstance)
+// Dolar
+router.get('/api/dolaroficial', c.dolar('oficial'))
+router.get('/api/dolarblue', c.dolar('blue'))
+router.get('/api/contadoliqui', c.dolar('contadoconliqui'))
+router.get('/api/dolarbolsa', c.dolar('bolsa'))
+router.get('/api/dolarturista', c.dolar('tarjeta'))
+router.get('/api/dolarcripto', c.dolar('cripto'))
+router.get('/api/mayorista', c.dolar('mayorista'))
 
-const riesgoController = require('../controller/riesgoController');
-const riesgoInstance = new riesgoController(dolarSiServiceInstance, utilInstance)
+// Euro y Real (oficial)
+router.get('/api/euro/oficial', c.moneda('eur'))
+router.get('/api/real/oficial', c.moneda('brl'))
 
-const euroController = require('../controller/euroController')
-const euroInstance = new euroController(dolarSiServiceInstance, utilInstance)
+router.get('/api/riesgopais', c.getRiesgoPais)
 
-const realController = require('../controller/realController')
-const realInstance = new realController(dolarSiServiceInstance, utilInstance)
+router.get('/api/bcra/reservas', c.bcra(1, 'USD'))
+router.get('/api/bcra/circulante', c.bcra(16, 'ARS'))
 
-const bcraController = require('../controller/bcraController')
-const bcraInstance = new bcraController(dolarSiServiceInstance, utilInstance)
+router.get('/api/evolucion/dolaroficial', c.evolucionDolar('oficial'))
+router.get('/api/evolucion/dolarblue', c.evolucionDolar('blue'))
 
-const casasController = require('../controller/casasController')
-const casasInstance = new casasController(dolarSiServiceInstance, utilInstance)
-
-router.get('/api/all', dolarInstance.getAllValues)
-router.get('/api/dolaroficial', dolarInstance.getDolarOficial)
-router.get('/api/dolarblue', dolarInstance.getDolarBlue)
-router.get('/api/contadoliqui', dolarInstance.getContadoConLiqui)
-router.get('/api/dolarpromedio', dolarInstance.getDolarPromedio)
-router.get('/api/dolarbolsa', dolarInstance.getDolarBolsa)
-router.get("/api/dolarturista", dolarInstance.getDolarTurista);
-
-router.get('/api/bbva', bancoInstance.getDolarBBVA)
-router.get('/api/piano', bancoInstance.getDolarPiano)
-router.get('/api/hipotecario', bancoInstance.getDolarHipotecario)
-router.get('/api/galicia', bancoInstance.getDolarGalicia)
-router.get('/api/santander', bancoInstance.getDolarSantander)
-router.get('/api/ciudad', bancoInstance.getDolarCiudad)
-router.get('/api/supervielle', bancoInstance.getDolarSupervielle)
-router.get('/api/patagonia', bancoInstance.getDolarPatagonia)
-router.get('/api/comafi', bancoInstance.getDolarComafi)
-router.get('/api/nacion', bancoInstance.getDolarNacion)
-router.get('/api/bind', bancoInstance.getDolarBIND)
-router.get('/api/chaco', bancoInstance.getDolarChaco)
-router.get('/api/pampa', bancoInstance.getDolarPampa)
-router.get('/api/bancor', bancoInstance.getDolarBancor)
-router.get('/api/mayorista', bancoInstance.getDolarMayorista)
-
-router.get('/api/riesgopais', riesgoInstance.getRiesgoPais)
-
-router.get('/api/euro/nacion', euroInstance.getEuroNacion)
-router.get('/api/euro/galicia', euroInstance.getEuroGalicia)
-router.get('/api/euro/bbva', euroInstance.getEuroBBVA)
-router.get('/api/euro/pampa', euroInstance.getEuroPampa)
-router.get('/api/euro/chaco', euroInstance.getEuroChaco)
-router.get('/api/euro/hipotecario', euroInstance.getEuroHipotecario)
-
-router.get('/api/real/nacion', realInstance.getRealNacion)
-router.get('/api/real/bbva', realInstance.getRealBBVA)
-router.get('/api/real/chaco', realInstance.getRealChaco)
-
-router.get('/api/bcra/reservas', bcraInstance.getReservas)
-router.get('/api/bcra/circulante', bcraInstance.getCirculante)
-
-router.get('/api/evolucion/dolaroficial', dolarInstance.getEvolucionDolarOficial)
-router.get('/api/evolucion/dolarblue', dolarInstance.getEvolucionDolarBlue)
-router.get('/api/evolucion/realoficial', realInstance.getEvolucionReal)
-router.get('/api/evolucion/eurooficial', euroInstance.getEvolucionEuro)
-
-router.get('/api/casas/caba/metropolis', casasInstance.getDolarMetro)
-router.get('/api/casas/caba/alpe', casasInstance.getDolarAlpe)
-router.get('/api/casas/caba/vaccaro', casasInstance.getDolarVaccaro)
-router.get('/api/casas/caba/transatlantica', casasInstance.getDolarTransatlantica)
-router.get('/api/casas/lp/tilos', casasInstance.getDolarLosTilos)
-router.get('/api/casas/mdp/jonestur', casasInstance.getDolarJonestur)
-router.get('/api/casas/mdp/moneta', casasInstance.getDolarMoneta)
-router.get('/api/casas/mdp/exchange', casasInstance.getDolarExchange)
-router.get('/api/casas/rosario/daminato', casasInstance.getDolarDaminato)
-router.get('/api/casas/mendoza/montemar', casasInstance.getDolarMontemar)
-router.get('/api/casas/tucuman/maguitur', casasInstance.getDolarMaguitur)
+// Endpoints que dependian de dolarsi.com y que las nuevas fuentes no ofrecen.
+const noDisponibles = [
+    '/api/dolarpromedio',
+    '/api/bbva', '/api/piano', '/api/hipotecario', '/api/galicia', '/api/santander', '/api/ciudad',
+    '/api/supervielle', '/api/patagonia', '/api/comafi', '/api/nacion', '/api/bind', '/api/chaco',
+    '/api/pampa', '/api/bancor',
+    '/api/euro/nacion', '/api/euro/galicia', '/api/euro/bbva', '/api/euro/pampa', '/api/euro/chaco',
+    '/api/euro/hipotecario',
+    '/api/real/nacion', '/api/real/bbva', '/api/real/chaco',
+    '/api/evolucion/realoficial', '/api/evolucion/eurooficial',
+    '/api/casas/caba/metropolis', '/api/casas/caba/alpe', '/api/casas/caba/vaccaro',
+    '/api/casas/caba/transatlantica', '/api/casas/lp/tilos', '/api/casas/mdp/jonestur',
+    '/api/casas/mdp/moneta', '/api/casas/mdp/exchange', '/api/casas/rosario/daminato',
+    '/api/casas/mendoza/montemar', '/api/casas/tucuman/maguitur'
+]
+noDisponibles.forEach(ruta => router.get(ruta, (req, res) => {
+    res.status(501).send({ error: 'Cotizacion no disponible: la fuente original (dolarsi.com) dejo de funcionar' })
+}))
 
 module.exports = router

@@ -1,49 +1,34 @@
+const pad = (n) => String(n).padStart(2, '0')
+
 class util {
 
-    getDateTime = function () {
-        const now = new Date();
-        const year = now.getFullYear();
-        let month = now.getMonth() + 1;
-        let day = now.getDate();
-        let hour = now.getHours();
-        let minute = now.getMinutes();
-        let second = now.getSeconds();
-        (month.toString().length == 1) ? month = '0' + month : '';
-        (day.toString().length == 1) ? day = '0' + day : '';
-        (hour.toString().length == 1) ? hour = '0' + hour : '';
-        (minute.toString().length == 1) ? minute = '0' + minute : '';
-        (second.toString().length == 1) ? second = '0' + second : '';
-
-        const dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
-        return dateTime;
+    getDateTime = (fecha) => {
+        const d = fecha ? new Date(fecha) : new Date()
+        const date = `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())}`
+        const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+        return `${date} ${time}`
     }
 
-    formatNumber = function (value, decimalPlaces) {
-        const decimals = decimalPlaces || 2;
-        const convertedValue = parseFloat(value.replace('.', '').replace(',', '.'))
-        return !isNaN(convertedValue) ? convertedValue.toFixed(decimals) : 'No cotiza'
+    formatNumber = (value, decimalPlaces = 2) => {
+        const n = Number(value)
+        return Number.isFinite(n) ? n.toFixed(decimalPlaces) : 'No cotiza'
     }
 
-    getEvolucion = function (evolucionAnual) {
-        const now = new Date()
-        const mesActual = now.getMonth() + 1
-
-        let meses = []
-        for (let i = 1; i <= Object.keys(evolucionAnual).length; i++) {
-            meses.push({
-                "anio": (i < mesActual ? now.getFullYear() : now.getFullYear() - 1).toString(),
-                "mes": i.toString(),
-                "valor": this.formatNumber(evolucionAnual[[Object.keys(evolucionAnual)[i - 1]]]._text).toString()
+    // Ultimo valor de venta de cada mes, de los ultimos 12 meses, ordenado por anio y mes.
+    getEvolucion = (historico) => {
+        const porMes = new Map()
+        for (const dia of historico) {
+            porMes.set(dia.fecha.slice(0, 7), dia)
+        }
+        const meses = [...porMes.entries()]
+            .sort(([a], [b]) => a.localeCompare(b))
+            .slice(-12)
+            .map(([key, dia]) => {
+                const [anio, mes] = key.split('-')
+                return { anio, mes: String(Number(mes)), valor: this.formatNumber(dia.venta) }
             })
-        }
-        meses = meses.sort((a, b) => a.anio - b.anio)
 
-        const valores = {
-            fecha: this.getDateTime(),
-            meses
-        }
-
-        return valores
+        return { fecha: this.getDateTime(), meses }
     }
 }
 

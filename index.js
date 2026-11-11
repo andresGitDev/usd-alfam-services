@@ -1,36 +1,29 @@
+require('dotenv').config()
 const express = require('express')
 const helmet = require('helmet')
-const bodyParser = require('body-parser')
 const router = require('./routes/router')
 const PORT = process.env.PORT || 7070
 const app = express();
 
-app.get('/', async (req, res) => {
-    try {
-        res.send("API para obtener las cotizaciones de los distintos tipos de dolar y riesgo pais. La documentacion la podes encontrar en https://github.com/andresGitDev/api-dolar")
-    } catch(e) {
-        console.log(e)
-        res.send(500);
-    }
-})
-
-// Settings
 app.set('port', PORT);
 
 app.use(helmet())
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use('/', router)
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// CORS
-app.use('*',function(req, res, next) {
+// CORS (antes del router para que aplique a todas las rutas)
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    res.header('Access-Control-Allow-Headers', 'Content-Type')
     next();
 });
 
-// Starting the server
+app.get('/', (req, res) => {
+    res.send("API para obtener las cotizaciones de los distintos tipos de dolar y riesgo pais. La documentacion la podes encontrar en https://github.com/andresGitDev/api-dolar")
+})
+
+app.use('/', router)
+
 app.listen(app.get('port'), () => {
     console.log('Server running on port ' + PORT)
 });
