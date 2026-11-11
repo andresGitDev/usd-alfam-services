@@ -24,6 +24,11 @@ app.get('/', (req, res) => {
 
 app.use('/', router)
 
-app.listen(app.get('port'), () => {
-    console.log('Server running on port ' + PORT)
-});
+// En Vercel la app se exporta y la plataforma maneja el servidor; en local escucha en un puerto.
+if (require.main === module) {
+    app.listen(app.get('port'), () => {
+        console.log('Server running on port ' + PORT)
+    });
+}
+
+module.exports = app
