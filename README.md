@@ -3,7 +3,9 @@
 Obtene las diferentes cotizaciones del dólar, euro, reservas, evolucion y riesgo pais.
 
 ## Endpoints
-URL: https://api-dolar-arg.vercel.app/
+URL: https://usd-alfam-services.vercel.app/
+
+Ejemplo: https://usd-alfam-services.vercel.app/api/all
 
 > **Actualización:** dolarsi.com dejó de funcionar, por lo que la API ahora usa [dolarapi.com](https://dolarapi.com), [argentinadatos.com](https://argentinadatos.com) y la API del BCRA.
 > Siguen disponibles: `dolaroficial`, `dolarblue`, `contadoliqui`, `dolarbolsa`, `dolarturista`, `mayorista`, `riesgopais`, `bcra/reservas`, `bcra/circulante`, `evolucion/dolaroficial`, `evolucion/dolarblue` y `all`. Nuevos: `/api/dolarcripto`, `/api/euro/oficial`, `/api/real/oficial`.
@@ -124,7 +126,14 @@ _Los endpoints de evolución devuelven la fecha y hora, y un array de meses con 
 }
 ```
 
-_La informacion es obtenida del sitio DolarSi, por lo cual tambien se puede obtener mucha mas informacion._
+_La informacion es obtenida de [dolarapi.com](https://dolarapi.com), [argentinadatos.com](https://argentinadatos.com) y la API del BCRA._
+
+## Despliegue
+
+El proyecto se despliega en Vercel desde el repo `andresGitDev/usd-alfam-services`:
+
+- `main`: producción. Cada push a `main` despliega automáticamente.
+- `develop`: desarrollo. Se trabaja acá y se hace merge a `main` cuando se quiere publicar.
 
 _Si encontras algun error o tenes alguna sugerencia, podes abrir un Issue o un Pull Request para contribuir._
 
