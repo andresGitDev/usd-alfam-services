@@ -1,7 +1,12 @@
 const metadata = require('../metadata.json')
 
+// Hora de Argentina (el servidor en Vercel corre en UTC): 2026-11-11T18:48:00
+const ahora = () => new Date()
+    .toLocaleString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' })
+    .replace(' ', 'T')
+
 const meta = () => ({
-    timestamp: new Date().toISOString().slice(0, 19),
+    timestamp: ahora(),
     version: `${metadata.buildMajor}.${metadata.buildMinor}.${metadata.buildRevision}`,
     source: 'usd-alfam-services'
 })
