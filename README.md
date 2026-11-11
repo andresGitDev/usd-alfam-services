@@ -1,4 +1,4 @@
-# API Dolar Argentina
+# API Dolar Argentina - ALFAM
 
 Obtene las diferentes cotizaciones del dólar, euro, reservas, evolucion y riesgo pais.
 
